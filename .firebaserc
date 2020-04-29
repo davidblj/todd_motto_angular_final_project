@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "fitness-app-4d086": {
+      "hosting": {
+        "FinalProjectV9": [
+          "fitness-app-4d086"
+        ]
+      }
+    }
+  }
+}

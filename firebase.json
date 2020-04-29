@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "FinalProjectV9",
+      "public": "dist/FinalProjectV9",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
