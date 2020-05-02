@@ -2,6 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms'
 import { AuthService } from './services/auth.service';
+import { AuthFormComponent } from './components/auth-form/auth-form.component';
 
 /* 
 do note that we are registering the auth service inside the 'for root' method.
@@ -15,10 +16,15 @@ parent module of these modules you are trying to import the shared module on:
 */
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    AuthFormComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule
+  ],
+  exports: [
+    AuthFormComponent
   ]
 })
 export class SharedModule {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Store } from 'src/app/store';
 import { tap } from 'rxjs/operators';
+import { User as FirebaseUser } from 'firebase';
 
 export interface User {
   email: string,
@@ -13,14 +14,14 @@ export interface User {
   providedIn: 'root'
 })
 export class AuthService {
-
+  
   auth$ = this.af.authState.pipe(
-    tap(this.setStore.apply(this))    
+    tap(this.setStore.bind(this))    
   )
 
   constructor(private af: AngularFireAuth, private store: Store) { }
 
-  setStore(user) {
+  setStore(user: FirebaseUser) {
     
     // logout store update
     if (!user) {
@@ -41,12 +42,11 @@ export class AuthService {
   }
 
   createUser(email: string, password: string) {
-    return this.af
-      .createUserWithEmailAndPassword(email, password);
+    return this.af.createUserWithEmailAndPassword(email, password);
   }
 
   loginUser(email: string, password: string) {
-    return this.af.signInWithEmailAndPassword(email, password);
+    return this.af.signInWithEmailAndPassword(email, password);    
   }
 
   logOutUser() {

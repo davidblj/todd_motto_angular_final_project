@@ -1,6 +1,6 @@
 
 import {pluck, distinctUntilChanged} from 'rxjs/operators';
-import { Observable ,  BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from './auth/shared/services/auth.service';
 
 export interface State {
