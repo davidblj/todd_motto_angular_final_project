@@ -6,7 +6,6 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 import { AuthRoutingModule } from './auth-routing.module';
 import { SharedModule } from './shared/shared.module';
-import { Routes } from '@angular/router';
 
 const firebaseConfig  = {
   apiKey: "AIzaSyBvpMH9MZoxjmNcbAotXjhRf1Bw6RjiUbc",

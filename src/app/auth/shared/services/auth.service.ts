@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Store } from 'src/app/store';
 import { tap } from 'rxjs/operators';
 import { User as FirebaseUser } from 'firebase';
+import { from } from 'rxjs';
 
 export interface User {
   email: string,
@@ -10,9 +11,7 @@ export interface User {
   authenticated: boolean
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
   
   auth$ = this.af.authState.pipe(
@@ -39,6 +38,10 @@ export class AuthService {
 
     // user log in
     this.store.set('user', currentLoggedInUser);    
+  }
+
+  get currentUser() {
+    return from(this.af.currentUser) 
   }
 
   createUser(email: string, password: string) {
