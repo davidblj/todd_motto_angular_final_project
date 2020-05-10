@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Store } from 'src/app/store';
 import { tap } from 'rxjs/operators';
 import { User as FirebaseUser } from 'firebase';
-import { from } from 'rxjs';
 
 export interface User {
   email: string,
@@ -18,7 +17,9 @@ export class AuthService {
     tap(this.setStore.bind(this))    
   )
 
-  constructor(private af: AngularFireAuth, private store: Store) { }
+  constructor(
+    private af: AngularFireAuth,
+    private store: Store) { }
 
   setStore(user: FirebaseUser) {
     
@@ -40,8 +41,8 @@ export class AuthService {
     this.store.set('user', currentLoggedInUser);    
   }
 
-  get currentUser() {
-    return from(this.af.currentUser) 
+  get currentUser() {    
+    return this.af.user 
   }
 
   createUser(email: string, password: string) {
