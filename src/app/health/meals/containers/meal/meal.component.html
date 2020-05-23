@@ -1,0 +1,14 @@
+
+<div class="meal">
+    <div class="meal__title">
+        <h1>
+            <img src="assets/img/food.svg" alt="">
+            <span>create meal</span>
+        </h1>
+    </div>
+    <div>
+        <app-meal-form
+            (create)="addMeal($event)">            
+        </app-meal-form>
+    </div>
+</div>

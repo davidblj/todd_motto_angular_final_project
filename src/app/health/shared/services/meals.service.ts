@@ -4,6 +4,7 @@ import { tap, map, flatMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/shared/services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { User } from 'firebase';
 
 export interface Meal {
   name: string,
@@ -22,15 +23,18 @@ export class MealsService {
     private authService: AuthService
   ) { }
 
-  get meals() {    
+  get meals() : Observable<Meal[]>{    
     
-    return this.authService.currentUser.pipe(
+    return this.currentUser.pipe(
       flatMap(user => {      
+        
         let userid = user.uid
-        return this.db.collection<Meal>(`mealsVault/${userid}/meals`)
+        return this.db
+          .collection<Meal>(`mealsVault/${userid}/meals`)
           .valueChanges()        
       }),
       tap(meals => {
+
         this.store.set('meals', meals)
       })
     )      
@@ -38,5 +42,9 @@ export class MealsService {
 
   setStore(meals : Meal[]) {
     this.store.set('meals', meals)
+  }
+
+  get currentUser() : Observable<User> {
+    return this.authService.currentUser
   }
 }

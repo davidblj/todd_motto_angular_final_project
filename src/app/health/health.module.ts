@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { HealthRoutingModule } from './health-routing.module';
 import { SharedModule } from './shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -10,7 +11,8 @@ import { SharedModule } from './shared/shared.module';
   imports: [
     CommonModule,
     HealthRoutingModule,    
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
+    ReactiveFormsModule
   ]
 })
 export class HealthModule { }
