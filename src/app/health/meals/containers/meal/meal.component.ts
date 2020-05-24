@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Meal } from 'src/app/health/shared/services/meals.service';
+import { Meal, MealsService } from 'src/app/health/shared/services/meals.service';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-meal',
@@ -8,12 +10,21 @@ import { Meal } from 'src/app/health/shared/services/meals.service';
 })
 export class MealComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private mealsService: MealsService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  addMeal(event : Meal) {
-    console.log(event);
+  addMeal(meal : Meal) {
+
+    this.mealsService.add(meal).pipe(
+      tap(this.backToMeals.bind(this))
+    ).subscribe()
+  }
+
+  backToMeals(next) {
+    this.router.navigate(['meals'])
   }
 }

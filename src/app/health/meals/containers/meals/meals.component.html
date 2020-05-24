@@ -1,4 +1,7 @@
 
+<!-- container components may held a good chunk of xml and css files, no
+just dumb components -->
+
 <div class="meal">    
     
     <div class="meal__title">        
@@ -17,10 +20,13 @@
             <img src="assets/img/face.svg" alt="">
             No meals, add a new meal to start
         </div>
+        <app-list-item 
+            *ngFor="let meal of meals"
+            [item]="meal"
+            (remove)="remove($event)">            
+        </app-list-item>
     </div>
      
-    <!-- placeholder for loading async values -->
-
     <ng-template #loading>
         <div class="message">
             <img src="assets/img/loading.svg" alt="">

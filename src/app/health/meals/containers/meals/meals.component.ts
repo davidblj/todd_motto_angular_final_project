@@ -24,6 +24,9 @@ export class MealsComponent implements OnInit, OnDestroy {
       loaded, the meals array is empty and fetching. Navigate away
       and return into the meals component, and that loading is gone as you 
       are obtaining the fetched results from the store first. 
+
+      note that ngOnInit is executed each time you enter on this component, 
+      and not only when is created
     */
     this.meals$ = this.store.select<Meal[]>('meals')
     this.subscription = this.mealsService.meals.subscribe()
@@ -31,5 +34,9 @@ export class MealsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe()
+  }
+
+  remove(meal: Meal) {
+    this.mealsService.remove(meal)
   }
 }
