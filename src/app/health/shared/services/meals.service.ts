@@ -3,7 +3,7 @@ import { Store } from 'src/app/store';
 import { tap, flatMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/shared/services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { User } from 'firebase';
 
 export interface Meal {
@@ -21,18 +21,36 @@ export class MealsService {
     private authService: AuthService
   ) { }
 
+  /* 
+    There are two possible solutions for this service. The solution given by todd
+    is by accesing the stored value and looking for a particular meal by id. 
+    The one given here, is by consuming a new service looking for that particular meal id
+  */
+  getMealBy(id: string) {
+    
+    if (!id) return of({})
+
+    return this.currentUser.pipe(
+      flatMap(this.getMealByUserAndMealId.bind(this)(id))
+    )
+  }
+
+  getMealByUserAndMealId(mealId) {
+    return (user) => { return this.getMealsDocumentPathBy(user).doc(mealId).valueChanges() }
+  }
+
   add(meal: Meal) {
     return this.currentUser.pipe(
       flatMap(this.addMealByUser.bind(this)(meal))
     )
-  }
+  }  
 
   addMealByUser(meal) {
-    return (user) => {this.getMealsDocumentPathBy(user).add(meal)}
+    return (user) => { this.getMealsDocumentPathBy(user).add(meal) }
   }
 
   // removing an element is quite interesting, remember we
-  // made 2 subscriptions; one 'get' to the store and one 'get' the meals collection of firestore, 
+  // made 2 subscriptions; one 'get' to the store and one 'get' to the meals collection of firestore, 
   // in the meals-component and meals service, respectively. 
 
   // The dataflow begins with firestore sockets, and its going to emit a new value each time
@@ -62,7 +80,8 @@ export class MealsService {
 
   getMealsBy(user: User) {    
     let idField = "$key"
-    return this.getMealsDocumentPathBy(user).valueChanges({idField})   
+    return this.getMealsDocumentPathBy(user).valueChanges({idField})   // add the document id into 
+    // the object response as a '$key' property 
   }
 
   setStore(meals : Meal[]) {
