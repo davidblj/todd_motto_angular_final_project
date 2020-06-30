@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Store } from 'src/app/store';
-import { tap, flatMap } from 'rxjs/operators';
+import { tap, flatMap, map } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/shared/services/auth.service';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentSnapshot, Action } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { User } from 'firebase';
 
@@ -36,7 +36,16 @@ export class MealsService {
   }
 
   getMealByUserAndMealId(mealId) {
-    return (user) => { return this.getMealsDocumentPathBy(user).doc(mealId).valueChanges() }
+    return (user) => 
+      this.getMealsDocumentPathBy(user).doc<Meal>(mealId).snapshotChanges().pipe(
+         map(this.mealSnapshotToMeal)
+      )    
+  }
+
+  mealSnapshotToMeal(mealSnapshotAction: Action<DocumentSnapshot<Meal>>) : Meal {
+    let $key = mealSnapshotAction.payload.id       
+    let meal = mealSnapshotAction.payload.data()
+    return { $key, ...meal }
   }
 
   add(meal: Meal) {
@@ -46,7 +55,7 @@ export class MealsService {
   }  
 
   addMealByUser(meal) {
-    return (user) => { this.getMealsDocumentPathBy(user).add(meal) }
+    return (user) => this.getMealsDocumentPathBy(user).add(meal)
   }
 
   // removing an element is quite interesting, remember we
@@ -61,13 +70,23 @@ export class MealsService {
   // in the meals interface component. 
 
   remove(meal: Meal) {
-    this.currentUser.pipe(
+    return this.currentUser.pipe(
       tap(this.removeMealByUser.bind(this)(meal))
-    ).subscribe()
+    )
   }
 
   removeMealByUser(meal: Meal) {
-    return (user) => { this.getMealsDocumentPathBy(user).doc(meal.$key).delete() }
+    return (user) => this.getMealsDocumentPathBy(user).doc(meal.$key).delete()
+  }
+
+  updateMealById(meal: Meal, id: string) {    
+    return this.currentUser.pipe(
+      tap(this.updateMealByIdAndUser.bind(this)(meal, id))
+    )
+  }
+
+  updateMealByIdAndUser(meal: Meal, id: string) {
+    return (user) => this.getMealsDocumentPathBy(user).doc(id).update(meal)
   }
 
   get meals() : Observable<Meal[]>{ 
@@ -81,7 +100,7 @@ export class MealsService {
   getMealsBy(user: User) {    
     let idField = "$key"
     return this.getMealsDocumentPathBy(user).valueChanges({idField})   // add the document id into 
-    // the object response as a '$key' property 
+                                                                       // the object response as a '$key' property 
   }
 
   setStore(meals : Meal[]) {

@@ -1,5 +1,8 @@
 
 <div class="meal">
+
+    <!-- remember that our meal object resolves inmediatly to nothing if
+         no id is provided in the route parameters -->
     <div class="meal__title">
         <h1>
             <img src="assets/img/food.svg" alt="">
@@ -13,9 +16,21 @@
             </ng-template>
         </h1>
     </div>
-    <div>
+    
+    <div *ngIf="meal$ | async as meal; else fetching">                
         <app-meal-form
-            (create)="addMeal($event)">            
-        </app-meal-form>
+            [meal]="meal"
+            (create)="add($event)"
+            (update)="update($event)"
+            (remove)="remove($event)">            
+        </app-meal-form>            
     </div>
+
+    <ng-template #fetching>
+        <div class="message">
+            <img src="assets/img/loading.svg">
+            Fetching meals...
+        </div>  
+    </ng-template>
+
 </div>

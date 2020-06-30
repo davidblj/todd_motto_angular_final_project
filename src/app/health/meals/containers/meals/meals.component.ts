@@ -37,6 +37,6 @@ export class MealsComponent implements OnInit, OnDestroy {
   }
 
   remove(meal: Meal) {
-    this.mealsService.remove(meal)
+    this.mealsService.remove(meal).subscribe()
   }
 }
