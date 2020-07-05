@@ -4,6 +4,7 @@ import { MealsService } from './services/meals.service';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { ListItemComponent } from './components/list-item/list-item.component';
 import { RouterModule } from '@angular/router';
+import { WorkoutsService } from './services/workouts.service';
 
 @NgModule({
   declarations: [ListItemComponent],
@@ -20,7 +21,8 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        MealsService
+        MealsService,
+        WorkoutsService
       ]
     }
   }

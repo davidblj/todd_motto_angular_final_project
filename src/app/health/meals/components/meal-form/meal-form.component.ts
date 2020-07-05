@@ -40,8 +40,10 @@ export class MealFormComponent implements OnInit, OnChanges {
   // this function inside the ngOnInit, but this property is
   // an async property, meaning that when this component is
   // rendered for the first time, our value may or may be 
-  // not be resolved
+  // not be resolved at that particular moment
+
   ngOnChanges(changes: SimpleChanges) {
+
     if (this.meal && this.meal.name) {
       this.exists = true
       this.form.patchValue(this.meal)

@@ -21,6 +21,24 @@ export class MealsService {
     private authService: AuthService
   ) { }
 
+  get meals() : Observable<Meal[]>{ 
+
+    return this.currentUser.pipe(
+      flatMap(this.getMealsBy.bind(this)),
+      tap(this.setStore.bind(this))
+    )      
+  }
+
+  private getMealsBy(user: User) {    
+    let idField = "$key"
+    return this.getMealsCollectionPathBy(user).valueChanges({idField})   // add the document id into 
+                                                                       // the object response as a '$key' property 
+  }
+
+  private setStore(meals : Meal[]) {
+    this.store.set('meals', meals)
+  }
+
   /* 
     There are two possible solutions for this service. The solution given by todd
     is by accesing the stored value and looking for a particular meal by id. 
@@ -35,14 +53,14 @@ export class MealsService {
     )
   }
 
-  getMealByUserAndMealId(mealId) {
+  private getMealByUserAndMealId(mealId) {
     return (user) => 
-      this.getMealsDocumentPathBy(user).doc<Meal>(mealId).snapshotChanges().pipe(
+      this.getMealsCollectionPathBy(user).doc<Meal>(mealId).snapshotChanges().pipe(
          map(this.mealSnapshotToMeal)
       )    
   }
 
-  mealSnapshotToMeal(mealSnapshotAction: Action<DocumentSnapshot<Meal>>) : Meal {
+  private mealSnapshotToMeal(mealSnapshotAction: Action<DocumentSnapshot<Meal>>) : Meal {
     let $key = mealSnapshotAction.payload.id       
     let meal = mealSnapshotAction.payload.data()
     return { $key, ...meal }
@@ -54,8 +72,8 @@ export class MealsService {
     )
   }  
 
-  addMealByUser(meal) {
-    return (user) => this.getMealsDocumentPathBy(user).add(meal)
+  private addMealByUser(meal) {
+    return (user) => this.getMealsCollectionPathBy(user).add(meal)
   }
 
   // removing an element is quite interesting, remember we
@@ -75,8 +93,8 @@ export class MealsService {
     )
   }
 
-  removeMealByUser(meal: Meal) {
-    return (user) => this.getMealsDocumentPathBy(user).doc(meal.$key).delete()
+  private removeMealByUser(meal: Meal) {
+    return (user) => this.getMealsCollectionPathBy(user).doc(meal.$key).delete()
   }
 
   updateMealById(meal: Meal, id: string) {    
@@ -85,33 +103,16 @@ export class MealsService {
     )
   }
 
-  updateMealByIdAndUser(meal: Meal, id: string) {
-    return (user) => this.getMealsDocumentPathBy(user).doc(id).update(meal)
-  }
+  private updateMealByIdAndUser(meal: Meal, id: string) {
+    return (user) => this.getMealsCollectionPathBy(user).doc(id).update(meal)
+  }    
 
-  get meals() : Observable<Meal[]>{ 
-
-    return this.currentUser.pipe(
-      flatMap(this.getMealsBy.bind(this)),
-      tap(this.setStore.bind(this))
-    )      
-  }
-
-  getMealsBy(user: User) {    
-    let idField = "$key"
-    return this.getMealsDocumentPathBy(user).valueChanges({idField})   // add the document id into 
-                                                                       // the object response as a '$key' property 
-  }
-
-  setStore(meals : Meal[]) {
-    this.store.set('meals', meals)
-  }
-
-  get currentUser() : Observable<User> {
+  private get currentUser() : Observable<User> {
     return this.authService.currentUser
   }
 
-  getMealsDocumentPathBy(user) {
+  // TODO: change the hierarchy for users/userId/meals
+  private getMealsCollectionPathBy(user) {
 
     return this.db
       .collection('meals')

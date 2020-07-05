@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Meal, MealsService } from 'src/app/health/shared/services/meals.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { tap, switchMap } from 'rxjs/operators';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-meal',
@@ -48,7 +48,6 @@ export class MealComponent implements OnInit, OnDestroy {
     // this is the equivalent but static way of doing things of 
     // an activated route parameters we used in ngOnInit  
     var id = this.activatedRoute.snapshot.params.id
-
     this.mealsService.updateMealById(meal, id).pipe(
       tap(this.backToMeals.bind(this))
     ).subscribe()    
