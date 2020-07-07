@@ -25,7 +25,8 @@ export class WorkoutFormComponent implements OnInit {
   remove = new EventEmitter<Workout>()
   
   form = this.fb.group({
-    name: ['', Validators.required]
+    name: ['', Validators.required],
+    type: 'strength'
   })
 
   constructor(private fb: FormBuilder) { }
