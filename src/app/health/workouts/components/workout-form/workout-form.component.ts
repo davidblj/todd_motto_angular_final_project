@@ -26,7 +26,16 @@ export class WorkoutFormComponent implements OnInit {
   
   form = this.fb.group({
     name: ['', Validators.required],
-    type: 'strength'
+    type: 'strength',
+    strength: this.fb.group({
+      reps: 0,
+      sets: 0, 
+      weight: 0
+    }),
+    endurance: this.fb.group({
+      distance: 0,
+      duration: 0
+    })
   })
 
   constructor(private fb: FormBuilder) { }
@@ -63,4 +72,11 @@ export class WorkoutFormComponent implements OnInit {
            this.name.touched
   }
 
+  get isOfTypeEndurance() {
+    return this.form.get('type').value === 'endurance'
+  }
+
+  get isOfTypeStrength() {
+    return this.form.get('type').value === 'strength'
+  }
 }
