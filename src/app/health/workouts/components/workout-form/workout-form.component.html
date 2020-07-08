@@ -8,7 +8,7 @@
 
             <label>
                 <h3>Workout name</h3>
-                <input type="text" placeholder="e.g. English Breakfast" formControlName="name">
+                <input type="text" placeholder="e.g. Pull ups" formControlName="name">
                 <div class="error" *ngIf="required">
                     Workout name is required
                 </div>
@@ -24,7 +24,7 @@
 
         <div class="workout-form__details">
             
-            <div *ngIf="isOfTypeEndurance">
+            <div *ngIf="isOfTypeStrength">
 
                 <div class="workout-form__fields" 
                      formGroupName="strength">
@@ -51,7 +51,7 @@
     
             </div>
     
-            <div *ngIf="isOfTypeStrength">
+            <div *ngIf="isOfTypeEndurance">
                 
                 <div class="workout-form__fields" 
                      formGroupName="endurance">

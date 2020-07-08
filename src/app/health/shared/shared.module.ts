@@ -5,15 +5,17 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { ListItemComponent } from './components/list-item/list-item.component';
 import { RouterModule } from '@angular/router';
 import { WorkoutsService } from './services/workouts.service';
+import { JoinIngredientsPipe } from './pipes/join-ingredients.pipe';
+import { JoinSchedulePipe } from './pipes/join-schedule.pipe';
 
 @NgModule({
-  declarations: [ListItemComponent],
+  declarations: [ListItemComponent, JoinIngredientsPipe, JoinSchedulePipe],
   imports: [
     RouterModule,
     CommonModule,
     AngularFireDatabaseModule
   ],
-  exports: [ListItemComponent]
+  exports: [ListItemComponent, JoinIngredientsPipe, JoinSchedulePipe]
 })
 export class SharedModule {
 

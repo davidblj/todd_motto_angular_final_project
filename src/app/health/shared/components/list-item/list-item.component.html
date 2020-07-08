@@ -2,12 +2,17 @@
 <div class="list-item">
 
     <a [routerLink]="getRoute()">
+        
         <p class="list-item__name">{{item.name}}</p>
         <p class="list-item__ingredients">
-            <span>
-                {{item.ingredients}}
+            <span *ngIf="item.ingredients; else workout">
+                {{ item.ingredients | joinIngredients }}
             </span>
-        </p>        
+        </p>     
+        <ng-template #workout>
+            {{ item | joinSchedule }}            
+        </ng-template>
+
     </a>
 
     <div class="list-item__delete"

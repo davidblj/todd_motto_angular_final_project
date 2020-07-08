@@ -41,6 +41,11 @@ export class WorkoutFormComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
+
+    if (this.workout && this.workout.name) {
+      this.exists = true
+      this.form.patchValue(this.workout)            
+    }
   }
 
   createWorkout() {

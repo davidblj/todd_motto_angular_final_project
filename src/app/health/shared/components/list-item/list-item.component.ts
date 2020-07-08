@@ -32,6 +32,6 @@ export class ListItemComponent implements OnInit {
   }
 
   getRoute() {
-    return [`../meals`, this.item.$key]
+    return [`../${this.item.ingredients ? 'meals' : 'workouts'}`, this.item.$key]
   }
 }
