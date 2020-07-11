@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { WorkoutsService } from './services/workouts.service';
 import { JoinIngredientsPipe } from './pipes/join-ingredients.pipe';
 import { JoinSchedulePipe } from './pipes/join-schedule.pipe';
+import { ScheduleService } from './services/schedule.service';
 
 @NgModule({
   declarations: [ListItemComponent, JoinIngredientsPipe, JoinSchedulePipe],
@@ -24,7 +25,8 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         MealsService,
-        WorkoutsService
+        WorkoutsService, 
+        ScheduleService
       ]
     }
   }

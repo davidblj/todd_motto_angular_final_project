@@ -1,0 +1,13 @@
+
+<div class="controls">
+        <button type="button"
+                (click)="moveDateBasedOn(offset - 1)">
+                <img src="assets/img/chevron-left.svg" alt="">
+        </button>
+        <p>{{ selected | date:'yMMMMd' }}</p>
+        <button type="button"
+                (click)="moveDateBasedOn(offset + 1)">
+                <img src="assets/img/chevron-right.svg" alt="">
+        </button>
+</div>
+ 

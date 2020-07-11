@@ -1,1 +1,9 @@
-<p>schedule works!</p>
+
+<div>
+    <div class="schedule">
+        <app-schedule-calendar
+            [date]="date$ | async"
+            (change)="changeDate($event)">
+        </app-schedule-calendar>
+    </div>
+</div>
