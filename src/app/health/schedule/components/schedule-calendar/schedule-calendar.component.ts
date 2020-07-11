@@ -1,18 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-schedule-calendar',
   templateUrl: './schedule-calendar.component.html',
   styleUrls: ['./schedule-calendar.component.scss']
 })
-export class ScheduleCalendarComponent implements OnInit {
+export class ScheduleCalendarComponent implements OnInit, OnChanges {
 
   selectedDate: Date
+  selectedDay: number
+  selectedWeek: number 
 
   // note that our variable 'selected day' comes from a subscription made to the
   // store in the schedule container component. 
   
-  // the chaing of events goes like this: The schedule container sets the behavior subject with a new 
+  // the chain of events goes like this: The schedule container sets the behavior subject with a new 
   // date through the schedule service. This subject in turn emits a new value, that our schedule 
   // container is also subscribed to, but only to chain an store data update through the service. 
   // Once the service updates the store, our subscription to the store in the schedule container
@@ -30,35 +32,51 @@ export class ScheduleCalendarComponent implements OnInit {
   change = new EventEmitter<Date>()
 
   constructor() { }
-
-  ngOnInit(): void {
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    this.selectedDay = this.day
   }
 
-  changeSelectedDate(weekOffset: number) {          
-    var startOfWeek = this.getStartOfWeek()
+  ngOnInit(): void {    
+  }
+
+  get day() {
+    const day = this.selectedDate.getDay()
+    return day === 0 ? 6 : day - 1    
+  }
+
+  changeSelectedDate(weekOffset: number) {   
+    let currentDate = new Date()       
+    var startOfWeek = this.getStartOfWeekOn(currentDate)
     var startOfWeekWithOffset = this.getStartWeekWithOffset(startOfWeek, weekOffset)
     this.change.emit(startOfWeekWithOffset)
   }
 
-  getStartOfWeek() : Date {    
-    let currentDate = new Date()
-    const dayOfWeek = this.getDayOfWeekFrom(currentDate)
-    const dayOfMonth = currentDate.getDate()
+  private getStartOfWeekOn(anyDate: Date) : Date {        
+    const dayOfWeek = this.getDayOfWeekFrom(anyDate)
+    const dayOfMonth = anyDate.getDate()
     const startDayOfWeek = dayOfMonth - dayOfWeek 
-    return new Date(currentDate.setDate(startDayOfWeek) )
+    return new Date(anyDate.setDate(startDayOfWeek) )
   }
 
-  getDayOfWeekFrom(currentDate: Date) {
+  private getDayOfWeekFrom(currentDate: Date) {
     const dayOfWeek = currentDate.getDay()
     const isSunday = dayOfWeek === 0
     const offset = isSunday ? (7 - 1) : -1
     return dayOfWeek +  offset
   } 
   
-  getStartWeekWithOffset(startOfWeek: Date, offset: number) : Date {
+  private getStartWeekWithOffset(startOfWeek: Date, offset: number) : Date {
     const weekOffset =  offset * 7
     const startWeekWithOffset = startOfWeek.getDate() + weekOffset
     return new Date(startOfWeek.setDate(startWeekWithOffset))
   }
 
+  // the interface is change due to our logic coded in the schedule days component
+  // but we need to notify the container of our new date selected in our 'days component'
+  changeSelectedWeekDay(weekDay: number) {
+    var startOfWeek = this.getStartOfWeekOn(this.selectedDate)
+    const newDate = new Date(startOfWeek.setDate(startOfWeek.getDate() + weekDay))
+    this.change.emit(newDate)
+  }
 }

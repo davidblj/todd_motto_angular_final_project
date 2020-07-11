@@ -4,5 +4,10 @@
         [selected]="selectedDate"
         (move)="changeSelectedDate($event)">        
     </app-schedule-controls>
+    
+    <app-schedule-days
+        [selectedDay]="selectedDay"
+        (select)="changeSelectedWeekDay($event)">        
+    </app-schedule-days>
 </div>
     
