@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from 'src/app/store';
-import { ScheduleService } from 'src/app/health/shared/services/schedule.service';
+import { ScheduleService, ScheduleItem } from 'src/app/health/shared/services/schedule.service';
 
 @Component({
   selector: 'app-schedule',
@@ -11,6 +11,7 @@ import { ScheduleService } from 'src/app/health/shared/services/schedule.service
 export class ScheduleComponent implements OnInit, OnDestroy {
 
   date$: Observable<Date>
+  schedule$: Observable<ScheduleItem>
   subscriptions : Subscription[]
 
   constructor(
@@ -21,9 +22,11 @@ export class ScheduleComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     // remember this is a behavior subject, a soon as we subscribe to it
-    // in the schedule service, the variable date$ is going to resolve 
+    // in the schedule service, the variable date$ and $schedule are going to resolve 
     // into some value
     this.date$ = this.store.select('date')
+    this.schedule$ = this.store.select('schedule')
+
 
     this.subscriptions = [
       this.scheduleService.schedule$.subscribe()

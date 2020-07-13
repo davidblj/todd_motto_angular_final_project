@@ -1,8 +1,12 @@
 
-<div>
+<!-- temporal workout for an early processing
+     of 'date$' -->
+<div *ngIf="schedule$ | async">
+    
     <div class="schedule">
         <app-schedule-calendar
             [date]="date$ | async"
+            [items]="schedule$ | async"
             (change)="changeDate($event)">
         </app-schedule-calendar>
     </div>
