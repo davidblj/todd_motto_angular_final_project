@@ -42,6 +42,9 @@ export class ScheduleCalendarComponent implements OnInit, OnChanges {
   @Output()
   change = new EventEmitter<Date>()
 
+  @Output()
+  select = new EventEmitter<any>()
+
   constructor() { }
   
   ngOnChanges(changes: SimpleChanges): void {
@@ -97,5 +100,17 @@ export class ScheduleCalendarComponent implements OnInit, OnChanges {
       return this.items[section]
     }
     return {}
+  }
+
+  onItemSelect({type, assignedItems,  data}: any, sectionKey: string) { 
+      
+    const selectedDate = this.selectedDate
+    this.select.emit({
+      type, 
+      assignedItems, 
+      data,
+      selectedDate,
+      sectionKey
+    })
   }
 }

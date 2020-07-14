@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, Subject } from 'rxjs';
 import { Store } from 'src/app/store';
 import { tap, switchMap, map } from 'rxjs/operators';
 import { Meal } from './meals.service';
@@ -32,16 +32,17 @@ export interface ScheduleList {
 export class ScheduleService {
 
   private date$ = new BehaviorSubject(new Date())  
-
-  // schedule$ = this.date$.pipe(
-  //   tap((next) => this.store.set('date', next))
-  // ) 
+  private selection$ = new Subject() 
 
   schedule$ = combineLatest(this.date$, this.currentUser).pipe(
     tap(([date, _]) => this.store.set('date', date)),
     switchMap(([date, user]) => this.getUserScheduleOrderedByTimeRange(user, date)),
     map(this.buildScheduleListByScheduleItemSection),
     tap((scheduleList) => this.store.set('schedule', scheduleList))
+  )
+
+  selected$ = this.selection$.pipe(
+    tap(selected => this.store.set('selected', selected))
   )
 
   constructor(
@@ -108,4 +109,8 @@ export class ScheduleService {
   update(date: Date) {
     this.date$.next(date)
   }  
+
+  updateItem(selectionObject: any) {
+    this.selection$.next(selectionObject)
+  }
 }

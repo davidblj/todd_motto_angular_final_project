@@ -29,7 +29,8 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
 
     this.subscriptions = [
-      this.scheduleService.schedule$.subscribe()
+      this.scheduleService.schedule$.subscribe(),      
+      this.scheduleService.selected$.subscribe(),
     ] 
   }
 
@@ -39,5 +40,9 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe())
+  } 
+
+  onItemSelect(selectionObject: any) {
+    this.scheduleService.updateItem(selectionObject)
   }
 }
