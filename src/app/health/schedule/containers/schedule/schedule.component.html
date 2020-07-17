@@ -4,11 +4,20 @@
 <div *ngIf="schedule$ | async">
     
     <div class="schedule">
+        
         <app-schedule-calendar
             [date]="date$ | async"
             [items]="schedule$ | async"
             (change)="changeDate($event)"
             (select)="onItemSelect($event)">
         </app-schedule-calendar>
+
+        <!-- pop up -->
+        <app-schedule-assign
+            *ngIf="open"
+            [selectedItem]="selectedItem$ | async"
+            [selectedList]="selectedList$ | async">            
+        </app-schedule-assign>        
+
     </div>
 </div>

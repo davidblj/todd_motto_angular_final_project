@@ -24,8 +24,10 @@ export class ScheduleSectionComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // we are going to emit a value with an empty assigned item, if none
-  // is selected, or we an assigned item, if its already created 
+  // we are going to emit a value with an empty or non empty assigned item.
+  // it consists on, the ScheduleItem, the list of meals or workouts (depending
+  // on where the user clicked) and the type of that list (a 'meal' or a 'workout')
+    
   onItemSelect(type: string, assignedItems: Meal[] | Workout[]  = []) {
     
     const data = this.section
@@ -35,5 +37,4 @@ export class ScheduleSectionComponent implements OnInit {
       data
     })
   }
-
 }

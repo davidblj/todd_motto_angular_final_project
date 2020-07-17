@@ -86,8 +86,7 @@ export class ScheduleCalendarComponent implements OnInit, OnChanges {
     return new Date(startOfWeek.setDate(startWeekWithOffset))
   }
 
-  // the interface is change due to our logic coded in the schedule days component
-  // but we need to notify the container of our new date selected in our 'days component'
+  // we need to notify the container of our new date selected in our 'days component'
   changeSelectedWeekDay(weekDay: number) {
     var startOfWeek = this.getStartOfWeekOn(this.selectedDate)
     const newDate = new Date(startOfWeek.setDate(startOfWeek.getDate() + weekDay))

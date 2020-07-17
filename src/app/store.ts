@@ -9,15 +9,19 @@ export interface State {
   user: User,
   meals: Meal[],
   date: Date,
+  selectedItem: any,
+  selectedList: any, 
   workouts: Workout[]
   [key: string]: any
 }
 
-// state initial value with an undefined logged in user
+// store initial value with undefined properties
 const state: State = {
   user: undefined,
-  meals: undefined,
+  meals: undefined,   
   date: undefined,
+  selectedItem: undefined,
+  selectedList: undefined,
   workouts: undefined
 };
 

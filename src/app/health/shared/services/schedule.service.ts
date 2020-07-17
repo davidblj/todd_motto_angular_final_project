@@ -41,8 +41,28 @@ export class ScheduleService {
     tap((scheduleList) => this.store.set('schedule', scheduleList))
   )
 
-  selected$ = this.selection$.pipe(
-    tap(selected => this.store.set('selected', selected))
+  // when an event is triggered in the schedule section component, we are
+  // going to do 2 things. 
+  
+  // One is to set the 'selected item', which contains the
+  // the type of item (meal or workout), the array of meals or workouts, and the
+  // selectedItem object
+  
+  // and the other one is to go and fetch the meals
+  // or the workouts, depending on the selection type, directly from the source,
+  // which is the store. 
+  
+  // Now, our stream 'list', is going to contain the workouts
+  // or the meals of our store, to later pass it down to our popup container 'schedule
+  // assign' 
+
+  selectedItem$ = this.selection$.pipe(
+    tap(selected => this.store.set('selectedItem', selected))
+  )
+
+  selectedList$ = this.selection$.pipe(
+    map((selected: any) => this.store.value[selected.type]),
+    tap((list: any) => this.store.set('selectedList', list))
   )
 
   constructor(
